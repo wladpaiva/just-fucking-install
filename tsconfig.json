@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "module": "nodenext"
+  }
+}
