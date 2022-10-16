@@ -13,15 +13,10 @@ afterEach(() => {
   vi.clearAllMocks()
 })
 
+vi.mock('./execute.js')
 vi.mock('./package-manager.js', () => {
   return {
     determinePackageManager: async () => packageManager,
-  }
-})
-
-vi.mock('./execute.js', () => {
-  return {
-    execute: vi.fn(),
   }
 })
 
