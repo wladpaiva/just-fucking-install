@@ -25,7 +25,14 @@ $ jf install
 $ jf i
 ```
 
-- [ ] TODO: If the package manager is not installed on your machine, it will be
+## TODOs
+
+- [x] Install new packages
+  - [x] Support `-D` or `--save-dev` flag
+- [ ] Uninstall packages
+- [ ] Run scripts
+- [ ] If the package manager is not installed on your machine, it will be
       installed first.
-- [ ] TODO: If the package manager is not defined in the repo, it will be
-      installed using the default package manager.
+- [ ] If the package manager is not defined in the repo, it will be installed
+      using the default package manager.
+- [ ] Create [Fig](https://fig.io) autocompletion for the CLI
