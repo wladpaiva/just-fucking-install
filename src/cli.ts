@@ -2,11 +2,14 @@
 import {cac} from 'cac'
 import config from '../package.json'
 import {install} from './install.js'
+import {uninstall} from './uninstall'
 
 const cli = cac()
 
-cli.command('', 'Install packages').action(cli.outputHelp)
+// Default command
+cli.command('', 'Show this help').action(cli.outputHelp)
 
+// Install
 cli
   .command(
     'install [...packages]',
@@ -15,9 +18,18 @@ cli
   .alias('i')
   .option('-D, --save-dev', 'Save it as dev dependency')
   .action(install)
-// .action((dir, options) => {
-//   console.log("remove " + dir + (options.recursive ? " recursively" : ""));
-// });
+
+// Uninstall
+cli
+  .command(
+    'uninstall [...packages]',
+    'Use options as you normally would with npm uninstall',
+  )
+  .alias('un')
+  .alias('remove')
+  .alias('rm')
+  .option('-D, --save-dev', 'Save it as dev dependency')
+  .action(uninstall)
 
 // Listen to unknown commands
 cli.on('command:*', () => {

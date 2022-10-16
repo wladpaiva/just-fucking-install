@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "packageManager": "npm@0.0.0",
+  "packageManager": "pnpm@0.0.0",
   "scripts": {
     "clear": "rm -rf node_modules *lock*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Wlad Paiva <desenvolvedormg@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "vercel": "^28.4.10"
+  }
 }
