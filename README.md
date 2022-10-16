@@ -1,1 +1,1 @@
-# Depreacted in favor of https://github.com/antfu/ni
+# Deprecated in favor of https://github.com/antfu/ni
