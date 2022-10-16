@@ -10,8 +10,5 @@
   },
   "keywords": [],
   "author": "Wlad Paiva <desenvolvedormg@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "vercel": "^28.4.10"
-  }
+  "license": "MIT"
 }
