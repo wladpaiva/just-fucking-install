@@ -29,8 +29,8 @@ $ jf i
 
 - [x] Install new packages
   - [x] Support `-D` or `--save-dev` flag
-- [ ] Uninstall packages
-- [ ] Run scripts
+- [x] Uninstall packages
+- [x] Run scripts
 - [ ] If the package manager is not installed on your machine, it will be
       installed first.
 - [ ] If the package manager is not defined in the repo, it will be installed

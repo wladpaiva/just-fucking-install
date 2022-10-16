@@ -2,12 +2,25 @@
 import {cac} from 'cac'
 import config from '../package.json'
 import {install} from './install.js'
+import {run} from './run'
 import {uninstall} from './uninstall'
 
 const cli = cac()
 
 // Default command
-cli.command('', 'Show this help').action(cli.outputHelp)
+cli.command('[script]').action((script?: unknown) => {
+  if (!script || typeof script === 'object') {
+    return cli.outputHelp()
+  }
+
+  return run(script as string)
+})
+
+// Run
+cli
+  .command('run [script]', 'Run a script defined in package.json')
+  .alias('run-script')
+  .action(run)
 
 // Install
 cli
