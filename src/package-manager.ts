@@ -1,14 +1,9 @@
 import fsPromises from 'fs/promises'
 import path from 'path'
-import {fileURLToPath} from 'url'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-export enum SupportedPackageManager {
-  NPM = 'npm',
-  YARN = 'yarn',
-  PNPM = 'pnpm',
-}
+import {SupportedPackageManager} from './support.js'
+// import {fileURLToPath} from 'url'
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 
 type PackageJson = {
   packageManager?: string
@@ -20,7 +15,7 @@ type PackageJson = {
  * @param {PackageJson} config
  * @returns {SupportedPackageManager | undefined}
  */
-export function fromConfig(config: PackageJson) {
+function fromConfig(config: PackageJson) {
   const {packageManager} = config
   const name = packageManager?.split('@')[0]
 
@@ -39,7 +34,7 @@ export function fromConfig(config: PackageJson) {
  * @param {string[]} files
  * @returns {SupportedPackageManager | undefined}
  */
-export function fromLockFile(files: string[]) {
+function fromLockFile(files: string[]) {
   if (files.includes('package-lock.json')) {
     return SupportedPackageManager.NPM
   } else if (files.includes('pnpm-lock.yaml')) {
@@ -51,6 +46,10 @@ export function fromLockFile(files: string[]) {
   return undefined
 }
 
+/**
+ * Determine which package manager is used in the current folder.
+ * @returns {SupportedPackageManager}
+ */
 export async function determinePackageManager() {
   // read the package.json file in the current directory
   const filePath = path.resolve(process.cwd(), './package.json')
@@ -74,7 +73,9 @@ export async function determinePackageManager() {
 
   if (!packageManager) {
     // TODO: use the default package manager
-    throw new Error('Unable to determine package manager')
+    throw new Error(
+      'Unable to determine which package manager to use. Please specify the package manager in the package.json file.',
+    )
   }
 
   return packageManager

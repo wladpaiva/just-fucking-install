@@ -2,22 +2,29 @@
   "name": "just-fucking-install",
   "description": "A package manager interface for npm, yarn, and pnpm",
   "version": "0.0.1",
-  "type": "module",
-  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "bin": {
     "jf": "./dist/cli.js"
   },
   "scripts": {
-    "dev": "node ./scripts/build.cjs",
-    "buid": "tsc && node ./scripts/build.cjs",
+    "dev": "tsup src/index.ts src/cli.ts --format esm,cjs --dts --watch",
+    "build": "tsup src/index.ts src/cli.ts --format esm,cjs --dts",
     "test": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc"
   },
   "devDependencies": {
+    "@types/events": "^3.0.0",
     "@types/node": "^18.8.4",
-    "esbuild": "^0.15.10",
     "prettier": "^2.7.1",
+    "tsup": "^6.2.3",
     "typescript": "^4.6.4",
+    "vite": "^3.1.8",
     "vitest": "^0.24.1"
   },
   "keywords": [
@@ -31,16 +38,17 @@
   "author": "Wlad Paiva <desenvolvedormg@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wladiston/my_package/issues"
+    "url": "https://github.com/wladiston/just-fuck-install/issues"
   },
-  "homepage": "https://github.com/wladiston/my_package",
+  "homepage": "https://github.com/wladiston/just-fuck-install",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wladiston/my_package.git"
+    "url": "https://github.com/wladiston/just-fuck-install.git"
   },
   "dependencies": {
-    "@types/events": "^3.0.0",
     "cac": "^6.7.14",
-    "chalk": "^5.1.2"
+    "clsx": "^1.2.1",
+    "concurrently": "^7.4.0",
+    "picocolors": "^1.0.0"
   }
 }

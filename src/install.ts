@@ -1,23 +1,57 @@
-import {
-  determinePackageManager,
-  SupportedPackageManager,
-} from './package-manager.js'
-import chalk from 'chalk'
+import {determinePackageManager} from './package-manager.js'
+import picocolors from 'picocolors'
+import {SupportedPackageManager} from './support.js'
+import {execute} from './execute.js'
+import clsx from 'clsx'
 
-const baseColors = {
-  [SupportedPackageManager.NPM]: '#d70000',
-  [SupportedPackageManager.YARN]: '#87afff',
-  [SupportedPackageManager.PNPM]: '#ffd700',
+const BASE_COLORS = {
+  [SupportedPackageManager.NPM]: 'red',
+  [SupportedPackageManager.YARN]: 'blue',
+  [SupportedPackageManager.PNPM]: 'yellow',
+} as const
+
+interface InstallOptions {
+  '--'?: string[]
+  D?: boolean
+  saveDev?: boolean
 }
 
-export const install = async (packages: string[], options: unknown) => {
+export const install = async (packages: string[], options?: InstallOptions) => {
   const packageManager = await determinePackageManager()
 
-  console.log(
-    `${chalk.hex(baseColors[packageManager])(
-      packageManager,
-    )} fucking installing`,
-  )
+  !process.env.VITEST &&
+    console.log(
+      [
+        picocolors.dim('Fucking installing packages with'),
+        picocolors.reset(
+          picocolors[BASE_COLORS[packageManager]](packageManager),
+        ),
+      ].join(' '),
+    )
 
-  // TODO: pass options down to npm
+  switch (packageManager) {
+    case SupportedPackageManager.NPM:
+      return await execute(
+        clsx('npm install', packages, {
+          '--save-dev': options?.saveDev,
+        }),
+      )
+
+    case SupportedPackageManager.YARN:
+      return await execute(
+        clsx('yarn add', packages, {
+          '--dev': options?.saveDev,
+        }),
+      )
+
+    case SupportedPackageManager.PNPM:
+      return await execute(
+        clsx('pnpm install', packages, {
+          '--save-dev': options?.saveDev,
+        }),
+      )
+
+    default:
+      throw new Error('Unsupported package manager')
+  }
 }

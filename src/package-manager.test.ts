@@ -1,48 +1,70 @@
-import {expect, test} from 'vitest'
-import {fromLockFile, fromConfig, SupportedPackageManager} from './main'
+import {expect, test, vi, afterEach, beforeEach, describe} from 'vitest'
+import {determinePackageManager} from './package-manager.js'
+import {SupportedPackageManager} from './support.js'
 
-const packageManagers = {
-  npm: 'package-lock.json',
-  pnpm: 'pnpm-lock.yaml',
-  yarn: 'yarn.lock',
+let config: {
+  packageManager?: string
 }
 
-for (const iterator in packageManagers) {
-  test(`should parse ${iterator} from package.json`, () => {
-    const config = {packageManager: `${iterator}@0.0.0`}
-    const result = fromConfig(config)
+let files: string[]
 
-    expect(result).toBe(
-      SupportedPackageManager[
-        iterator.toUpperCase() as keyof typeof SupportedPackageManager
-      ],
-    )
-  })
-
-  test(`should parse ${iterator} from files`, () => {
-    const result = fromLockFile([
-      'package.json',
-      packageManagers[iterator as keyof typeof packageManagers],
-      'tsconfig.json',
-    ])
-
-    expect(result).toBe(
-      SupportedPackageManager[
-        iterator.toUpperCase() as keyof typeof SupportedPackageManager
-      ],
-    )
-  })
-}
-
-test('should return undetermined from package.json', () => {
-  const config = {}
-  const result = fromConfig(config)
-
-  expect(result).toBe(undefined)
+beforeEach(() => {
+  config = {}
+  files = []
 })
 
-test('should return undetermined from files', () => {
-  const result = fromLockFile(['package.json', 'tsconfig.json'])
+afterEach(() => {
+  vi.clearAllMocks()
+})
 
-  expect(result).toBe(undefined)
+vi.mock('fs/promises', () => {
+  return {
+    default: {
+      readFile: async () => JSON.stringify(config),
+      readdir: async () => files,
+    },
+  }
+})
+
+describe('Determine package manager from package.json settings', () => {
+  test('Identify NPM', async () => {
+    config = {packageManager: `npm@0.0.0`}
+    const result = await determinePackageManager()
+    expect(result).toBe(SupportedPackageManager.NPM)
+  })
+
+  test('Identify YARN', async () => {
+    config = {packageManager: `yarn@0.0.0`}
+    const result = await determinePackageManager()
+    expect(result).toBe(SupportedPackageManager.YARN)
+  })
+
+  test('Identify PNPM', async () => {
+    config = {packageManager: `pnpm@0.0.0`}
+    const result = await determinePackageManager()
+    expect(result).toBe(SupportedPackageManager.PNPM)
+  })
+})
+
+describe('Determine package manager from lock file', () => {
+  test('Identify NPM', async () => {
+    files = ['package.json', 'package-lock.json', 'tsconfig.json']
+    const result = await determinePackageManager()
+
+    expect(result).toBe(SupportedPackageManager.NPM)
+  })
+
+  test('Identify YARN', async () => {
+    files = ['package.json', 'yarn.lock', 'tsconfig.json']
+    const result = await determinePackageManager()
+
+    expect(result).toBe(SupportedPackageManager.YARN)
+  })
+
+  test('Identify NPM', async () => {
+    files = ['package.json', 'pnpm-lock.yaml', 'tsconfig.json']
+    const result = await determinePackageManager()
+
+    expect(result).toBe(SupportedPackageManager.PNPM)
+  })
 })

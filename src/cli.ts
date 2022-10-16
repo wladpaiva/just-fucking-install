@@ -5,7 +5,7 @@ import {install} from './install.js'
 
 const cli = cac()
 
-cli.command('', 'Install packages').action(install)
+cli.command('', 'Install packages').action(cli.outputHelp)
 
 cli
   .command(

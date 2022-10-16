@@ -23,7 +23,6 @@ npm install -g just-fucking-install
 # just fucking install
 $ jf install
 $ jf i
-$ jf
 ```
 
 - [ ] TODO: If the package manager is not installed on your machine, it will be
