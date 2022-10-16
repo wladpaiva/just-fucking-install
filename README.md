@@ -20,9 +20,20 @@ npm install -g just-fucking-install
 ## Usage
 
 ```sh
-# just fucking install
-$ jf install
-$ jf i
+# just fucking...
+
+# install
+$ jf install my-package other-one -D
+$ jf i my-package
+
+# uninstall
+$ jf uninstall my-package
+
+# Run scripts
+$ jf run my-script
+
+# Show help
+$ jf --help
 ```
 
 ## TODOs
